@@ -19,7 +19,7 @@ export default class RefactorCommandExecutor {
   }
 
   public async execute(selectedPath: string): Promise<void> {
-
+    selectedPath = selectedPath.split(path.sep).join(path.posix.sep);
     const lstat = fs.lstatSync(selectedPath);
     const isDir = lstat.isDirectory();
     const isFile = lstat.isFile();
@@ -40,8 +40,8 @@ export default class RefactorCommandExecutor {
         isFind = true;
       } else {
         let baseFileDirName = path.dirname(fileDirName);
-        const rootPathLength = path.dirname(rootPath?.uri.path!).split(path.sep).filter(ix => ix).length;
-        const firDirNamePathLength = path.dirname(baseFileDirName).split(path.sep).filter(ix => ix).length - rootPathLength;
+        const rootPathLength = path.dirname(rootPath?.uri.path!).split(path.posix.sep).filter(ix => ix).length;
+        const firDirNamePathLength = path.dirname(baseFileDirName).split(path.posix.sep).filter(ix => ix).length - rootPathLength;
         for (let index = 0; index <= firDirNamePathLength; index++) {
           namespace += "." + path.basename(fileDirName);
           let childProjPath = findFirstProject(baseFileDirName);
@@ -74,7 +74,7 @@ export default class RefactorCommandExecutor {
 
           csharpFiles.forEach(file => {
             let fileRootDir = path.dirname(file);
-            let pathName = fileRootDir.substring(rootDirPath.length).split(path.sep).filter(x => x).join('.');
+            let pathName = fileRootDir.substring(rootDirPath.length).split(path.posix.sep).filter(x => x).join('.');
             let csProjName = path.basename(element).replace(".csproj", "");
             let namespace = csProjName + (!pathName ? '' : '.' + pathName);
             files.push({
@@ -86,8 +86,8 @@ export default class RefactorCommandExecutor {
       }
       if (!isFind) {
         let rootDirPath = path.dirname(selectedPath)
-        let totalDirsCount = path.dirname(rootDirPath).split(path.sep).filter(ix => ix).length -
-          path.dirname(rootPath?.uri.path!).split(path.sep).filter(ix => ix).length;
+        let totalDirsCount = path.dirname(rootDirPath).split(path.posix.sep).filter(ix => ix).length -
+          path.dirname(rootPath?.uri.path!).split(path.posix.sep).filter(ix => ix).length;
 
         for (let index = 0; index <= totalDirsCount; index++) {
           let rootProjPath = findFirstProject(rootDirPath);
@@ -98,7 +98,7 @@ export default class RefactorCommandExecutor {
             if (csharpFiles && csharpFiles.length) {
               csharpFiles.forEach(file => {
                 let rootDirFileName = path.dirname(file);
-                let subNamespace = rootDirFileName.substring(rootDirPath.length).split(path.sep).filter(x => x).join('.');
+                let subNamespace = rootDirFileName.substring(rootDirPath.length).split(path.posix.sep).filter(x => x).join('.');
                 let namespace = projectName + '.' + subNamespace;
                 files.push({
                   File: file,
