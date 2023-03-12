@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       'csharprefactor.refactorNamespace',
-      async (options: RegisterCommandCallbackArgument) => await (new RefactorCommandExecutor()).execute(options.path)
+      async (options: RegisterCommandCallbackArgument) => await (new RefactorCommandExecutor()).execute(options.fsPath)
     )
   );
 
